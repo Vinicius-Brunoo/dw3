@@ -5,7 +5,7 @@ content-type: application/json
 ###
 
 //-- # teste de API helloUserGet
-GET http://localhost:40000/helloUserGet/"John Doe" HTTP/1.1
+GET http://localhost:40000/helloUserGet/John%20Doe HTTP/1.1
 
 ###
 
@@ -15,4 +15,48 @@ content-type: application/json
 
 {
     "username": "John Doe"
+}
+
+###
+
+//-- # teste de API somar
+POST http://localhost:40000/somar HTTP/1.1
+content-type: application/json
+
+{
+    "num1": 4,
+    "num2": 2
+}
+
+###
+
+//-- # teste de API subtrair
+POST http://localhost:40000/subtrair HTTP/1.1
+content-type: application/json
+
+{
+    "num1": 4,
+    "num2": 2
+}
+
+###
+
+//-- # teste de API multiplicar
+POST http://localhost:40000/multiplicar HTTP/1.1
+content-type: application/json
+
+{
+    "num1": 4,
+    "num2": 2
+}
+
+###
+
+//-- # teste de API dividir
+POST http://localhost:40000/dividir HTTP/1.1
+content-type: application/json
+
+{
+    "num1": 4,
+    "num2": 2
 }

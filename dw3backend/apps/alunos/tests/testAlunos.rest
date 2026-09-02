@@ -1,0 +1,76 @@
+### Necessário para pegar o token
+### Post
+# @name loginAutenticado
+POST http://localhost:40000/Login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "qwe",
+    "password": "qwe"
+}
+
+### Seta o token
+@accessToken = {{loginAutenticado.response.body.$.token}}
+@prontuario = pr{{$randomInt 100000 999999}}
+
+###
+
+### teste de inserção de aluno
+# @name insertAluno
+POST http://localhost:40000/insertAluno HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "alunoid": 0,
+    "prontuario": "{{prontuario}}",
+    "nome": "Carlos das Matias",
+    "endereco": " Rua das couves",
+    "rendafamiliar": 10000,
+    "datanascimento": "1999-12-12",
+    "cursoid": 2,
+    "deleted": false
+}
+
+###
+
+### Seta o aluno criado
+@alunoID = {{insertAluno.response.body.$.alunoid}}
+
+###
+
+### teste de buscar todos os alunos
+GET http://localhost:40000/getAllAlunos HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+###
+
+### teste de buscar aluno por ID
+GET http://localhost:40000/getAlunoByID/{{alunoID}} HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+###
+
+### teste de atualização de aluno
+PUT http://localhost:40000/updateAluno/{{alunoID}} HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "prontuario": "{{prontuario}}",
+    "nome": "xJosé das Neves",
+    "endereco": "x Rua das couves",
+    "rendafamiliar": 0,
+    "datanascimento": "1999-12-12",
+    "cursoid": 2,
+    "deleted": false
+}
+
+###
+
+### teste de exclusão de aluno
+DELETE http://localhost:40000/deleteAluno/{{alunoID}} HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}

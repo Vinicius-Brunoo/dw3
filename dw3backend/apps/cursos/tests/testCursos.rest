@@ -1,0 +1,68 @@
+### Necessario para pegar o token
+# @name loginAutenticado
+POST http://localhost:40000/Login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "qwe",
+    "password": "qwe"
+}
+
+###
+
+@accessToken = {{loginAutenticado.response.body.$.token}}
+@codigoCurso = CUR{{$randomInt 100000 999999}}
+
+###
+
+### teste de insercao de curso
+# @name insertCurso
+POST http://localhost:40000/insertCurso HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "codigo": "{{codigoCurso}}",
+    "descricao": "Curso de Teste",
+    "ativo": true,
+    "deleted": false
+}
+
+###
+
+@cursoID = {{insertCurso.response.body.$.cursoid}}
+
+###
+
+### teste de buscar todos os cursos
+GET http://localhost:40000/getAllCursos HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+###
+
+### teste de buscar curso por ID
+GET http://localhost:40000/getCursoByID/{{cursoID}} HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+###
+
+### teste de atualizacao de curso
+PUT http://localhost:40000/updateCurso/{{cursoID}} HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "codigo": "{{codigoCurso}}",
+    "descricao": "Curso de Teste Atualizado",
+    "ativo": true,
+    "deleted": false
+}
+
+###
+
+### teste de exclusao de curso
+DELETE http://localhost:40000/deleteCurso/{{cursoID}} HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}

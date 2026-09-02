@@ -3,7 +3,7 @@ const hello = (req, res) => (async () => {
 })();
 
 const helloUserGet = (request, res) => (async () => {
-    const { username } = request.params
+    const username = request.params.nome
     res.json({ status: "ok", "nomeusuario": username });
 })();
 
