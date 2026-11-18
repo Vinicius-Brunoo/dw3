@@ -1,0 +1,10 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+  <div class="card page-card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <h1 class="h4 fw-bold mb-2">{{ title or 'Erro' }}</h1>
+      <p class="text-secondary mb-0">{{ message or 'Pagina nao encontrada.' }}</p>
+    </div>
+  </div>
+{% endblock %}

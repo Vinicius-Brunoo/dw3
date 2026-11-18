@@ -1,0 +1,29 @@
+{% extends "layout.njk" %}
+{% block content %}
+  <a class="back-link" href="/animais"><i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar para animais</a>
+  <header class="page-heading form-heading"><div><p class="eyebrow">ANIMAIS</p><h1>{% if oper == 'Up' %}Editar animal{% elif oper == 'De' %}Remover animal{% elif oper == 'Re' %}Detalhes do animal{% else %}Novo animal{% endif %}</h1><p class="page-description">Informe o nome e a data de nascimento do animal.</p></div></header>
+  <section class="panel form-panel"><div class="panel-heading"><div><h2>Dados do animal</h2><p>Preencha os campos abaixo para continuar.</p></div><span class="section-icon"><i class="bi bi-tags" aria-hidden="true"></i></span></div>
+    <form id="frmAnimais" class="record-form" data-servidor-dw3="{{ servidorDw3 }}" data-oper="{{ oper }}" data-animalid="{{ animalid }}">
+      <input type="hidden" id="animalid" name="animalid" value="{{ animalid }}">
+      <input type="hidden" id="removido" name="removido" value="false">
+      {% if oper == 'De' %}<div class="alert alert-warning" role="alert">Confira os dados antes de confirmar a remoção deste registro.</div>{% endif %}
+        <div class="row g-4">
+          <div class="col-12 col-md-6"><label for="nome" class="form-label">Nome</label>
+            <input class="form-control" id="nome" placeholder="Ex.: Mimosa" type="text" maxlength="120" required>
+          </div>
+          <div class="col-12 col-md-6"><label for="datanasc" class="form-label">Data de nascimento</label>
+            <input class="form-control" id="datanasc" type="date" required>
+          </div>
+        </div>
+
+      <div class="form-actions">
+        {% if oper == 'Cr' %}<button type="button" class="btn btn-primary" id="btnInserirAnimal"><i class="bi bi-check2" aria-hidden="true"></i> Salvar animal</button>{% endif %}
+        {% if oper == 'Up' %}<button type="button" class="btn btn-primary" id="btnAtualizarAnimal"><i class="bi bi-check2" aria-hidden="true"></i> Salvar alterações</button>{% endif %}
+        {% if oper == 'De' %}<button type="button" class="btn btn-danger" id="btnRemoverAnimal"><i class="bi bi-trash" aria-hidden="true"></i> Confirmar remoção</button>{% endif %}
+        <a class="btn btn-outline-secondary" href="/animais" id="btnFecharAnimal">{% if oper == 'Re' %}Voltar{% else %}Cancelar{% endif %}</a>
+      </div>
+    </form>
+  </section>
+  <script src="/js/dw3frontend.js"></script>
+  <script src="/apps/animais/vwFormAnimais.js"></script>
+{% endblock %}

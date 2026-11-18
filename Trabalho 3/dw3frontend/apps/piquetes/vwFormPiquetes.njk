@@ -1,0 +1,35 @@
+{% extends "layout.njk" %}
+{% block content %}
+  <a class="back-link" href="/piquetes"><i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar para piquetes</a>
+  <header class="page-heading form-heading"><div><p class="eyebrow">PIQUETES</p><h1>{% if oper == 'Up' %}Editar piquete{% elif oper == 'De' %}Remover piquete{% elif oper == 'Re' %}Detalhes do piquete{% else %}Novo piquete{% endif %}</h1><p class="page-description">Identifique o piquete, informe sua localização e selecione o pasto.</p></div></header>
+  <section class="panel form-panel"><div class="panel-heading"><div><h2>Dados do piquete</h2><p>Preencha os campos abaixo para continuar.</p></div><span class="section-icon"><i class="bi bi-bounding-box" aria-hidden="true"></i></span></div>
+    <form id="frmPiquetes" class="record-form" data-servidor-dw3="{{ servidorDw3 }}" data-oper="{{ oper }}" data-piqueteid="{{ piqueteid }}">
+      <input type="hidden" id="piqueteid" name="piqueteid" value="{{ piqueteid }}">
+      <input type="hidden" id="removido" name="removido" value="false">
+      {% if oper == 'De' %}<div class="alert alert-warning" role="alert">Confira os dados antes de confirmar a remoção deste registro.</div>{% endif %}
+        <div class="row g-4">
+          <div class="col-12 col-md-6"><label for="descricao" class="form-label">Descrição</label>
+            <input class="form-control" id="descricao" placeholder="Ex.: Piquete 01" type="text" maxlength="120" required>
+          </div>
+          <div class="col-12 col-md-6"><label for="latitude" class="form-label">Latitude</label>
+            <input class="form-control" id="latitude" placeholder="Ex.: -20,42" type="number" step="any" min="-90" max="90" required>
+          </div>
+          <div class="col-12 col-md-6"><label for="longitude" class="form-label">Longitude</label>
+            <input class="form-control" id="longitude" placeholder="Ex.: -49,97" type="number" step="any" min="-180" max="180" required>
+          </div>
+          <div class="col-12 col-md-6"><label for="pastoidfk" class="form-label">Pasto</label>
+            <select class="form-select" id="pastoidfk" required><option value="">Selecione</option></select><p class="field-help">Ainda não cadastrou? <a href="/pastos/form?oper=Cr">Adicionar pasto</a></p>
+          </div>
+        </div>
+
+      <div class="form-actions">
+        {% if oper == 'Cr' %}<button type="button" class="btn btn-primary" id="btnInserirPiquete"><i class="bi bi-check2" aria-hidden="true"></i> Salvar piquete</button>{% endif %}
+        {% if oper == 'Up' %}<button type="button" class="btn btn-primary" id="btnAtualizarPiquete"><i class="bi bi-check2" aria-hidden="true"></i> Salvar alterações</button>{% endif %}
+        {% if oper == 'De' %}<button type="button" class="btn btn-danger" id="btnRemoverPiquete"><i class="bi bi-trash" aria-hidden="true"></i> Confirmar remoção</button>{% endif %}
+        <a class="btn btn-outline-secondary" href="/piquetes" id="btnFecharPiquete">{% if oper == 'Re' %}Voltar{% else %}Cancelar{% endif %}</a>
+      </div>
+    </form>
+  </section>
+  <script src="/js/dw3frontend.js"></script>
+  <script src="/apps/piquetes/vwFormPiquetes.js"></script>
+{% endblock %}

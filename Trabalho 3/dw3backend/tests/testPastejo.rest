@@ -1,0 +1,149 @@
+@base = http://localhost:40003
+@token = {{login.response.body.token}}
+
+###
+# @name login
+POST {{base}}/Login
+Content-Type: application/json
+
+{"username":"admin","password":"admin"}
+
+###
+# @name novoPasto
+POST {{base}}/insertPasto
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "descricao": "Pasto norte",
+  "areatotal": 12.5
+}
+
+###
+# @name novoPiquete
+POST {{base}}/insertPiquete
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "descricao": "Piquete A",
+  "latitude": -20.42,
+  "longitude": -49.97,
+  "pastoidfk": "{{novoPasto.response.body.pastoid}}"
+}
+
+###
+# @name novoAnimal
+POST {{base}}/insertAnimal
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "Mimosa",
+  "datanasc": "2023-03-10"
+}
+
+###
+# @name novoAlocado
+POST {{base}}/insertAlocado
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "animalidifk": "{{novoAnimal.response.body.animalid}}",
+  "piqueteidfk": "{{novoPiquete.response.body.piqueteid}}",
+  "datainicio": "2026-11-18",
+  "datafinal": null
+}
+
+###
+GET {{base}}/getAllPastos
+Authorization: Bearer {{token}}
+
+###
+GET {{base}}/getPastoByID/{{novoPasto.response.body.pastoid}}
+Authorization: Bearer {{token}}
+
+###
+PUT {{base}}/updatePasto/{{novoPasto.response.body.pastoid}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "descricao": "Pasto norte",
+  "areatotal": 12.5
+}
+
+###
+GET {{base}}/getAllPiquetes
+Authorization: Bearer {{token}}
+
+###
+GET {{base}}/getPiqueteByID/{{novoPiquete.response.body.piqueteid}}
+Authorization: Bearer {{token}}
+
+###
+PUT {{base}}/updatePiquete/{{novoPiquete.response.body.piqueteid}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "descricao": "Piquete A",
+  "latitude": -20.42,
+  "longitude": -49.97,
+  "pastoidfk": "{{novoPasto.response.body.pastoid}}"
+}
+
+###
+GET {{base}}/getAllAnimais
+Authorization: Bearer {{token}}
+
+###
+GET {{base}}/getAnimalByID/{{novoAnimal.response.body.animalid}}
+Authorization: Bearer {{token}}
+
+###
+PUT {{base}}/updateAnimal/{{novoAnimal.response.body.animalid}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "Mimosa",
+  "datanasc": "2023-03-10"
+}
+
+###
+GET {{base}}/getAllAlocados
+Authorization: Bearer {{token}}
+
+###
+GET {{base}}/getAlocadoByID/{{novoAlocado.response.body.alocadoid}}
+Authorization: Bearer {{token}}
+
+###
+PUT {{base}}/updateAlocado/{{novoAlocado.response.body.alocadoid}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "animalidifk": "{{novoAnimal.response.body.animalid}}",
+  "piqueteidfk": "{{novoPiquete.response.body.piqueteid}}",
+  "datainicio": "2026-11-18",
+  "datafinal": null
+}
+
+###
+DELETE {{base}}/deleteAlocado/{{novoAlocado.response.body.alocadoid}}
+Authorization: Bearer {{token}}
+
+###
+DELETE {{base}}/deleteAnimal/{{novoAnimal.response.body.animalid}}
+Authorization: Bearer {{token}}
+
+###
+DELETE {{base}}/deletePiquete/{{novoPiquete.response.body.piqueteid}}
+Authorization: Bearer {{token}}
+
+###
+DELETE {{base}}/deletePasto/{{novoPasto.response.body.pastoid}}
+Authorization: Bearer {{token}}

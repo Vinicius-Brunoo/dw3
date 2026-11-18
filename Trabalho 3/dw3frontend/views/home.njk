@@ -1,0 +1,17 @@
+{% extends "layout.njk" %}
+{% block content %}
+  <header class="page-heading"><div><p class="eyebrow">UM OLHAR SOBRE A PROPRIEDADE</p><h1>Visão geral</h1><p class="page-description">Seus cadastros e o manejo do pastejo, em um só lugar.</p></div><a class="btn btn-primary" href="/alocados/form?oper=Cr"><i class="bi bi-plus-lg" aria-hidden="true"></i> Nova alocação</a></header>
+  <div id="homeAlert" class="alert alert-danger d-none" role="alert"></div>
+  <section class="summary-grid" aria-label="Resumo dos cadastros" id="resumo" data-servidor-dw3="{{ servidorDw3 }}">
+    <a class="summary-card" href="/pastos"><span class="summary-icon"><i class="bi bi-map" aria-hidden="true"></i></span><span class="summary-label">Pastos</span><strong id="totalPastos">—</strong><span class="summary-footer">Áreas da propriedade <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span></a>
+    <a class="summary-card" href="/piquetes"><span class="summary-icon"><i class="bi bi-bounding-box" aria-hidden="true"></i></span><span class="summary-label">Piquetes</span><strong id="totalPiquetes">—</strong><span class="summary-footer">Divisões para o pastejo <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span></a>
+    <a class="summary-card" href="/animais"><span class="summary-icon"><i class="bi bi-tags" aria-hidden="true"></i></span><span class="summary-label">Animais</span><strong id="totalAnimais">—</strong><span class="summary-footer">Animais cadastrados <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span></a>
+    <a class="summary-card" href="/alocados"><span class="summary-icon"><i class="bi bi-arrow-left-right" aria-hidden="true"></i></span><span class="summary-label">Alocações</span><strong id="totalAlocados">—</strong><span class="summary-footer">Registros de ocupação <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span></a>
+  </section>
+  <div class="overview-grid">
+    <section class="panel"><div class="panel-heading"><div><h2>Últimas alocações</h2><p>Os registros mais recentes do manejo.</p></div><a class="text-link" href="/alocados">Ver todas <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div><div id="ultimasAlocacoes" class="allocation-list" aria-live="polite"><p class="loading-text">Carregando alocações…</p></div></section>
+    <aside class="guide-panel"><span class="guide-icon"><i class="bi bi-signpost-split" aria-hidden="true"></i></span><p class="eyebrow">PASSO A PASSO</p><h2>Organize seu manejo</h2><p>Uma boa organização começa pelos cadastros.</p><ol class="guide-steps"><li><span>01</span><div><a href="/pastos">Cadastre os pastos</a><small>Defina as áreas da propriedade.</small></div></li><li><span>02</span><div><a href="/piquetes">Organize os piquetes</a><small>Vincule cada divisão a um pasto.</small></div></li><li><span>03</span><div><a href="/animais">Identifique os animais</a><small>Mantenha o cadastro atualizado.</small></div></li><li><span>04</span><div><a href="/alocados">Registre as alocações</a><small>Escolha o animal, o piquete e o período.</small></div></li></ol></aside>
+  </div>
+  <script src="/js/dw3frontend.js"></script>
+  <script src="/apps/home/vwHome.js"></script>
+{% endblock %}

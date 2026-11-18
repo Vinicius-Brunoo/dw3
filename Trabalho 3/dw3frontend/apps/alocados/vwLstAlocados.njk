@@ -1,0 +1,23 @@
+{% extends "layout.njk" %}
+{% block styles %}<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">{% endblock %}
+{% block content %}
+  <header class="page-heading"><div><p class="eyebrow">CADASTROS DA PROPRIEDADE</p><h1>Alocações</h1><p class="page-description">Acompanhe os animais em cada piquete e seus períodos de ocupação.</p></div><a class="btn btn-primary" href="/alocados/form?oper=Cr" id="btnNovoAlocado"><i class="bi bi-plus-lg" aria-hidden="true"></i> Nova alocação</a></header>
+  <div id="alocadosAlert" class="alert alert-danger d-none" role="alert"></div>
+  <section class="panel table-panel"><div class="panel-heading"><div><h2>Alocações cadastradas</h2><p>Consulte, edite ou organize seus registros.</p></div><span class="section-icon"><i class="bi bi-arrow-left-right" aria-hidden="true"></i></span></div>
+    <div id="alocadosListagem" data-servidor-dw3="{{ servidorDw3 }}" class="table-content"><div class="table-responsive"><table id="tblAlocados" class="table table-hover align-middle w-100"><thead>
+              <tr>
+                <th>ID</th>
+                <th>Animal</th>
+                <th>Piquete</th>
+                <th>Data inicial</th>
+                <th>Data final</th>
+                <th>Ações</th>
+              </tr>
+            </thead><tbody></tbody></table></div></div>
+  </section>
+  <script src="/js/dw3frontend.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+  <script src="/apps/alocados/vwLstAlocados.js"></script>
+{% endblock %}

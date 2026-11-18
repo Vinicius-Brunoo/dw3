@@ -1,0 +1,43 @@
+name: dw3-trabalho3
+
+services:
+  banco:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: dw3_pastejo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASS:?Configure DB_PASS no arquivo .env}
+    volumes:
+      - pastejo_dados:/var/lib/postgresql/data
+      - ./dw3backend/databaseConfig.sql:/docker-entrypoint-initdb.d/01-base.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d dw3_pastejo"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  backend:
+    build: ./dw3backend
+    environment:
+      PORT: 40003
+      DB_HOST: banco
+      DB_PORT: 5432
+      DB_NAME: dw3_pastejo
+      DB_USER: postgres
+      DB_PASS: ${DB_PASS:?Configure DB_PASS no arquivo .env}
+      SECRET_API: ${SECRET_API:?Configure SECRET_API no arquivo .env}
+    ports:
+      - "40003:40003"
+    depends_on:
+      banco:
+        condition: service_healthy
+  frontend:
+    build: ./dw3frontend
+    environment:
+      PORT: 40103
+      SERVIDOR_DW3: http://localhost:40003
+    ports:
+      - "40103:40103"
+    depends_on:
+      - backend
+volumes:
+  pastejo_dados:

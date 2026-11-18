@@ -1,0 +1,23 @@
+{% extends "layout.njk" %}
+{% block styles %}<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">{% endblock %}
+{% block content %}
+  <header class="page-heading"><div><p class="eyebrow">CADASTROS DA PROPRIEDADE</p><h1>Piquetes</h1><p class="page-description">Organize as divisões dos pastos para o manejo dos animais.</p></div><a class="btn btn-primary" href="/piquetes/form?oper=Cr" id="btnNovoPiquete"><i class="bi bi-plus-lg" aria-hidden="true"></i> Novo piquete</a></header>
+  <div id="piquetesAlert" class="alert alert-danger d-none" role="alert"></div>
+  <section class="panel table-panel"><div class="panel-heading"><div><h2>Piquetes cadastrados</h2><p>Consulte, edite ou organize seus registros.</p></div><span class="section-icon"><i class="bi bi-bounding-box" aria-hidden="true"></i></span></div>
+    <div id="piquetesListagem" data-servidor-dw3="{{ servidorDw3 }}" class="table-content"><div class="table-responsive"><table id="tblPiquetes" class="table table-hover align-middle w-100"><thead>
+              <tr>
+                <th>ID</th>
+                <th>Descrição</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Pasto</th>
+                <th>Ações</th>
+              </tr>
+            </thead><tbody></tbody></table></div></div>
+  </section>
+  <script src="/js/dw3frontend.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+  <script src="/apps/piquetes/vwLstPiquetes.js"></script>
+{% endblock %}

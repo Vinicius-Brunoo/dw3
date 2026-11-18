@@ -1,0 +1,35 @@
+{% extends "layout.njk" %}
+{% block content %}
+  <a class="back-link" href="/alocados"><i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar para alocações</a>
+  <header class="page-heading form-heading"><div><p class="eyebrow">ALOCAÇÕES</p><h1>{% if oper == 'Up' %}Editar alocação{% elif oper == 'De' %}Remover alocação{% elif oper == 'Re' %}Detalhes da alocação{% else %}Nova alocação{% endif %}</h1><p class="page-description">Escolha o animal, o piquete e o período de permanência.</p></div></header>
+  <section class="panel form-panel"><div class="panel-heading"><div><h2>Dados da alocação</h2><p>Preencha os campos abaixo para continuar.</p></div><span class="section-icon"><i class="bi bi-arrow-left-right" aria-hidden="true"></i></span></div>
+    <form id="frmAlocados" class="record-form" data-servidor-dw3="{{ servidorDw3 }}" data-oper="{{ oper }}" data-alocadoid="{{ alocadoid }}">
+      <input type="hidden" id="alocadoid" name="alocadoid" value="{{ alocadoid }}">
+      <input type="hidden" id="removido" name="removido" value="false">
+      {% if oper == 'De' %}<div class="alert alert-warning" role="alert">Confira os dados antes de confirmar a remoção deste registro.</div>{% endif %}
+        <div class="row g-4">
+          <div class="col-12 col-md-6"><label for="animalidifk" class="form-label">Animal</label>
+            <select class="form-select" id="animalidifk" required><option value="">Selecione o animal</option></select><p class="field-help"><a href="/animais/form?oper=Cr">Cadastrar animal</a></p>
+          </div>
+          <div class="col-12 col-md-6"><label for="piqueteidfk" class="form-label">Piquete</label>
+            <select class="form-select" id="piqueteidfk" required><option value="">Selecione o piquete</option></select><p class="field-help"><a href="/piquetes/form?oper=Cr">Cadastrar piquete</a></p>
+          </div>
+          <div class="col-12 col-md-6"><label for="datainicio" class="form-label">Data inicial</label>
+            <input class="form-control" id="datainicio" type="date" required>
+          </div>
+          <div class="col-12 col-md-6"><label for="datafinal" class="form-label">Data final</label>
+            <input class="form-control" id="datafinal" type="date" aria-describedby="datafinalAjuda"><p class="field-help" id="datafinalAjuda">Deixe em branco se a alocação ainda está em andamento.</p>
+          </div>
+        </div>
+
+      <div class="form-actions">
+        {% if oper == 'Cr' %}<button type="button" class="btn btn-primary" id="btnInserirAlocado"><i class="bi bi-check2" aria-hidden="true"></i> Salvar alocação</button>{% endif %}
+        {% if oper == 'Up' %}<button type="button" class="btn btn-primary" id="btnAtualizarAlocado"><i class="bi bi-check2" aria-hidden="true"></i> Salvar alterações</button>{% endif %}
+        {% if oper == 'De' %}<button type="button" class="btn btn-danger" id="btnRemoverAlocado"><i class="bi bi-trash" aria-hidden="true"></i> Confirmar remoção</button>{% endif %}
+        <a class="btn btn-outline-secondary" href="/alocados" id="btnFecharAlocado">{% if oper == 'Re' %}Voltar{% else %}Cancelar{% endif %}</a>
+      </div>
+    </form>
+  </section>
+  <script src="/js/dw3frontend.js"></script>
+  <script src="/apps/alocados/vwFormAlocados.js"></script>
+{% endblock %}

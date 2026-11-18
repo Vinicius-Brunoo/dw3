@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#235d45">
+  <title>{{ title or 'Pastejo' }} · Gestão rural</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  {% block styles %}{% endblock %}
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body class="{% if showNavbar %}workspace{% else %}login-page{% endif %}">
+  {% if showNavbar %}
+    <aside class="sidebar">
+      <a class="brand" href="/home" aria-label="Pastejo, início">
+        <span class="brand-mark"><i class="bi bi-flower1" aria-hidden="true"></i></span>
+        <span>Pastejo<small>GESTÃO RURAL</small></span>
+      </a>
+      <button class="btn menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Abrir menu"><i class="bi bi-list" aria-hidden="true"></i></button>
+      <div class="sidebar-content collapse" id="mainNavbar">
+        <nav class="sidebar-nav" aria-label="Navegação principal">
+          <span class="nav-caption">ÁREA DE TRABALHO</span>
+          <a href="/home" {% if activeMenu == 'home' %}class="active" aria-current="page"{% endif %}><i class="bi bi-grid-1x2" aria-hidden="true"></i>Visão geral</a>
+          <span class="nav-caption">CADASTROS</span>
+          <a href="/pastos" {% if activeMenu == 'pastos' %}class="active" aria-current="page"{% endif %}><i class="bi bi-map" aria-hidden="true"></i>Pastos</a>
+          <a href="/piquetes" {% if activeMenu == 'piquetes' %}class="active" aria-current="page"{% endif %}><i class="bi bi-bounding-box" aria-hidden="true"></i>Piquetes</a>
+          <a href="/animais" {% if activeMenu == 'animais' %}class="active" aria-current="page"{% endif %}><i class="bi bi-tags" aria-hidden="true"></i>Animais</a>
+          <a href="/alocados" {% if activeMenu == 'alocados' %}class="active" aria-current="page"{% endif %}><i class="bi bi-arrow-left-right" aria-hidden="true"></i>Alocações</a>
+        </nav>
+        <div class="sidebar-footer"><span class="account-icon"><i class="bi bi-person" aria-hidden="true"></i></span><div>Minha conta<small>Área de gestão</small></div><a href="/login" title="Sair da conta" aria-label="Sair da conta"><i class="bi bi-box-arrow-right" aria-hidden="true"></i></a></div>
+      </div>
+    </aside>
+  {% endif %}
+  <div class="main-area">
+    {% if showNavbar %}
+      <header class="topbar"><span><span class="topbar-label">Minha propriedade</span><span class="breadcrumb-divider">/</span>{{ title }}</span><span class="topbar-tag"><i class="bi bi-flower1" aria-hidden="true"></i> Pastejo rotacionado</span></header>
+    {% endif %}
+    <main class="{% if showNavbar %}page-content{% else %}login-content{% endif %}" id="conteudo">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

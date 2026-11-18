@@ -1,0 +1,16 @@
+POST http://localhost:40003/Login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "admin",
+    "password": "admin"
+}
+
+###
+
+POST http://localhost:40003/Logout HTTP/1.1
+content-type: application/json
+
+{
+
+}
