@@ -1,6 +1,6 @@
 # DW3 — Pastejo rotacionado
 
-Trabalho 3, seguindo a estrutura dos exemplos de alunos e cursos. Os exemplos originais continuam disponíveis fora desta pasta.
+Sistema de pastejo rotacionado para o 3º trabalho de Desenvolvimento Web III, organizado em MVC e mantido em um repositório exclusivo do trabalho.
 
 - **Model:** `dw3backend/apps/<modulo>/model/mdl*.js` contém as consultas SQL e retorna os dados, sem usar `req` ou `res`.
 - **Controller:** `dw3backend/apps/<modulo>/controller/ctl*.js` recebe e valida a requisição, chama o model e monta a resposta JSON.
@@ -28,7 +28,7 @@ dw3frontend/
 
 ## Executar com Docker
 
-A configuração local `.env` já foi gerada e é ignorada pelo Git. Em outra máquina, copie `.env.example` para `.env` e configure a senha do banco e a chave JWT. Depois execute na pasta `Trabalho 3`:
+Na primeira execução, copie `.env.example` para `.env` e configure a senha do banco e a chave JWT. O arquivo `.env` é ignorado pelo Git. Depois execute na raiz do projeto:
 
 ```bash
 docker compose up --build -d
@@ -73,4 +73,4 @@ O arquivo `dw3backend/tests/testPastejo.rest` contém o login e as 20 operaçõe
 
 ## Entrega
 
-Use um repositório próprio para o Trabalho 3: o enunciado proíbe entregar pelo repositório das aulas. Consulte o prazo no Moodle e prepare uma apresentação de 10 a 15 minutos.
+Envie o link deste repositório exclusivo no AVA. Consulte o prazo no Moodle e prepare uma apresentação de 10 a 15 minutos.
