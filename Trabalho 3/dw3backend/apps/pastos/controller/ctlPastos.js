@@ -1,10 +1,7 @@
-const db = require("../database/databaseconfig");
+const mdlPastos = require("../model/mdlPastos");
 
 async function GetAllPastos(req, res) {
-    const result = await db.query(
-        "SELECT pastoid, descricao, areatotal, removido FROM pasto WHERE removido = false ORDER BY pastoid"
-    );
-    const registro = result.rows;
+    const registro = await mdlPastos.GetAllPastos();
     res.json({ status: "ok", registro });
 }
 
@@ -13,11 +10,7 @@ async function GetPastoByID(req, res) {
     if (!Number.isSafeInteger(id) || id <= 0) {
         return res.status(400).json({ status: "ID inválido." });
     }
-    const result = await db.query(
-        "SELECT pastoid, descricao, areatotal, removido FROM pasto WHERE pastoid = $1 AND removido = false",
-        [id]
-    );
-    const registro = result.rows;
+    const registro = await mdlPastos.GetPastoByID(id);
     res.json({ status: "ok", registro });
 }
 
@@ -32,11 +25,8 @@ async function InsertPasto(req, res) {
     ) {
         return res.status(400).json({ status: "Preencha os campos obrigatórios." });
     }
-    const result = await db.query(
-        "INSERT INTO pasto (descricao, areatotal) VALUES ($1, $2) RETURNING pastoid",
-        [registro.descricao, registro.areatotal]
-    );
-    res.json({ status: "ok", linhasAfetadas: result.rowCount, pastoid: result.rows[0].pastoid });
+    const result = await mdlPastos.InsertPasto(registro);
+    res.json({ status: "ok", ...result });
 }
 
 async function UpdatePasto(req, res) {
@@ -54,12 +44,9 @@ async function UpdatePasto(req, res) {
     ) {
         return res.status(400).json({ status: "Preencha os campos obrigatórios." });
     }
-    const result = await db.query(
-        "UPDATE pasto SET descricao = $2, areatotal = $3 WHERE pastoid = $1 AND removido = false",
-        [id, registro.descricao, registro.areatotal]
-    );
-    if (!result.rowCount) return res.status(404).json({ status: "Registro não encontrado." });
-    res.json({ status: "ok", linhasAfetadas: result.rowCount });
+    const result = await mdlPastos.UpdatePasto(id, registro);
+    if (!result.linhasAfetadas) return res.status(404).json({ status: "Registro não encontrado." });
+    res.json({ status: "ok", ...result });
 }
 
 async function DeletePasto(req, res) {
@@ -67,12 +54,9 @@ async function DeletePasto(req, res) {
     if (!Number.isSafeInteger(id) || id <= 0) {
         return res.status(400).json({ status: "ID inválido." });
     }
-    const result = await db.query(
-        "UPDATE pasto SET removido = true WHERE pastoid = $1 AND removido = false",
-        [id]
-    );
-    if (!result.rowCount) return res.status(404).json({ status: "Registro não encontrado." });
-    res.json({ status: "ok", linhasAfetadas: result.rowCount });
+    const result = await mdlPastos.DeletePasto(id);
+    if (!result.linhasAfetadas) return res.status(404).json({ status: "Registro não encontrado." });
+    res.json({ status: "ok", ...result });
 }
 
 module.exports = { GetAllPastos, GetPastoByID, InsertPasto, UpdatePasto, DeletePasto };

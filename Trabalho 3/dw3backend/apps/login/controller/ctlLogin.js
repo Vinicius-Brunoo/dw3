@@ -1,13 +1,9 @@
 const jwt = require("jsonwebtoken");
 const bCrypt = require("bcryptjs");
-const db = require("../database/databaseconfig");
+const mdlLogin = require("../model/mdlLogin");
 
 const Login = async (req, res) => {
-    const result = await db.query(
-        "SELECT username, password FROM usuarios WHERE username = $1 AND removido = false",
-        [req.body.username]
-    );
-    const credencial = result.rows;
+    const credencial = await mdlLogin.GetCredencial(req.body.username);
 
     if (credencial.length === 0) {
         return res.status(200).json({ message: "Usuário não identificado!" });

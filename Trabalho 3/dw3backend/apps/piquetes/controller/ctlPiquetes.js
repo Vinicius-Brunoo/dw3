@@ -1,10 +1,7 @@
-const db = require("../database/databaseconfig");
+const mdlPiquetes = require("../model/mdlPiquetes");
 
 async function GetAllPiquetes(req, res) {
-    const result = await db.query(
-        "SELECT piqueteid, descricao, latitude, longitude, pastoidfk, removido FROM piquete WHERE removido = false ORDER BY piqueteid"
-    );
-    const registro = result.rows;
+    const registro = await mdlPiquetes.GetAllPiquetes();
     res.json({ status: "ok", registro });
 }
 
@@ -13,11 +10,7 @@ async function GetPiqueteByID(req, res) {
     if (!Number.isSafeInteger(id) || id <= 0) {
         return res.status(400).json({ status: "ID inválido." });
     }
-    const result = await db.query(
-        "SELECT piqueteid, descricao, latitude, longitude, pastoidfk, removido FROM piquete WHERE piqueteid = $1 AND removido = false",
-        [id]
-    );
-    const registro = result.rows;
+    const registro = await mdlPiquetes.GetPiqueteByID(id);
     res.json({ status: "ok", registro });
 }
 
@@ -36,11 +29,8 @@ async function InsertPiquete(req, res) {
     ) {
         return res.status(400).json({ status: "Preencha os campos obrigatórios." });
     }
-    const result = await db.query(
-        "INSERT INTO piquete (descricao, latitude, longitude, pastoidfk) VALUES ($1, $2, $3, $4) RETURNING piqueteid",
-        [registro.descricao, registro.latitude, registro.longitude, registro.pastoidfk]
-    );
-    res.json({ status: "ok", linhasAfetadas: result.rowCount, piqueteid: result.rows[0].piqueteid });
+    const result = await mdlPiquetes.InsertPiquete(registro);
+    res.json({ status: "ok", ...result });
 }
 
 async function UpdatePiquete(req, res) {
@@ -62,12 +52,9 @@ async function UpdatePiquete(req, res) {
     ) {
         return res.status(400).json({ status: "Preencha os campos obrigatórios." });
     }
-    const result = await db.query(
-        "UPDATE piquete SET descricao = $2, latitude = $3, longitude = $4, pastoidfk = $5 WHERE piqueteid = $1 AND removido = false",
-        [id, registro.descricao, registro.latitude, registro.longitude, registro.pastoidfk]
-    );
-    if (!result.rowCount) return res.status(404).json({ status: "Registro não encontrado." });
-    res.json({ status: "ok", linhasAfetadas: result.rowCount });
+    const result = await mdlPiquetes.UpdatePiquete(id, registro);
+    if (!result.linhasAfetadas) return res.status(404).json({ status: "Registro não encontrado." });
+    res.json({ status: "ok", ...result });
 }
 
 async function DeletePiquete(req, res) {
@@ -75,12 +62,9 @@ async function DeletePiquete(req, res) {
     if (!Number.isSafeInteger(id) || id <= 0) {
         return res.status(400).json({ status: "ID inválido." });
     }
-    const result = await db.query(
-        "UPDATE piquete SET removido = true WHERE piqueteid = $1 AND removido = false",
-        [id]
-    );
-    if (!result.rowCount) return res.status(404).json({ status: "Registro não encontrado." });
-    res.json({ status: "ok", linhasAfetadas: result.rowCount });
+    const result = await mdlPiquetes.DeletePiquete(id);
+    if (!result.linhasAfetadas) return res.status(404).json({ status: "Registro não encontrado." });
+    res.json({ status: "ok", ...result });
 }
 
 module.exports = { GetAllPiquetes, GetPiqueteByID, InsertPiquete, UpdatePiquete, DeletePiquete };

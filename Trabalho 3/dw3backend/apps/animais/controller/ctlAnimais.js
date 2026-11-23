@@ -1,10 +1,7 @@
-const db = require("../database/databaseconfig");
+const mdlAnimais = require("../model/mdlAnimais");
 
 async function GetAllAnimais(req, res) {
-    const result = await db.query(
-        "SELECT animalid, nome, TO_CHAR(datanasc, 'YYYY-MM-DD') AS datanasc, removido FROM animal WHERE removido = false ORDER BY animalid"
-    );
-    const registro = result.rows;
+    const registro = await mdlAnimais.GetAllAnimais();
     res.json({ status: "ok", registro });
 }
 
@@ -13,11 +10,7 @@ async function GetAnimalByID(req, res) {
     if (!Number.isSafeInteger(id) || id <= 0) {
         return res.status(400).json({ status: "ID inválido." });
     }
-    const result = await db.query(
-        "SELECT animalid, nome, TO_CHAR(datanasc, 'YYYY-MM-DD') AS datanasc, removido FROM animal WHERE animalid = $1 AND removido = false",
-        [id]
-    );
-    const registro = result.rows;
+    const registro = await mdlAnimais.GetAnimalByID(id);
     res.json({ status: "ok", registro });
 }
 
@@ -32,11 +25,8 @@ async function InsertAnimal(req, res) {
     ) {
         return res.status(400).json({ status: "Preencha os campos obrigatórios." });
     }
-    const result = await db.query(
-        "INSERT INTO animal (nome, datanasc) VALUES ($1, $2) RETURNING animalid",
-        [registro.nome, registro.datanasc]
-    );
-    res.json({ status: "ok", linhasAfetadas: result.rowCount, animalid: result.rows[0].animalid });
+    const result = await mdlAnimais.InsertAnimal(registro);
+    res.json({ status: "ok", ...result });
 }
 
 async function UpdateAnimal(req, res) {
@@ -54,12 +44,9 @@ async function UpdateAnimal(req, res) {
     ) {
         return res.status(400).json({ status: "Preencha os campos obrigatórios." });
     }
-    const result = await db.query(
-        "UPDATE animal SET nome = $2, datanasc = $3 WHERE animalid = $1 AND removido = false",
-        [id, registro.nome, registro.datanasc]
-    );
-    if (!result.rowCount) return res.status(404).json({ status: "Registro não encontrado." });
-    res.json({ status: "ok", linhasAfetadas: result.rowCount });
+    const result = await mdlAnimais.UpdateAnimal(id, registro);
+    if (!result.linhasAfetadas) return res.status(404).json({ status: "Registro não encontrado." });
+    res.json({ status: "ok", ...result });
 }
 
 async function DeleteAnimal(req, res) {
@@ -67,12 +54,9 @@ async function DeleteAnimal(req, res) {
     if (!Number.isSafeInteger(id) || id <= 0) {
         return res.status(400).json({ status: "ID inválido." });
     }
-    const result = await db.query(
-        "UPDATE animal SET removido = true WHERE animalid = $1 AND removido = false",
-        [id]
-    );
-    if (!result.rowCount) return res.status(404).json({ status: "Registro não encontrado." });
-    res.json({ status: "ok", linhasAfetadas: result.rowCount });
+    const result = await mdlAnimais.DeleteAnimal(id);
+    if (!result.linhasAfetadas) return res.status(404).json({ status: "Registro não encontrado." });
+    res.json({ status: "ok", ...result });
 }
 
 module.exports = { GetAllAnimais, GetAnimalByID, InsertAnimal, UpdateAnimal, DeleteAnimal };

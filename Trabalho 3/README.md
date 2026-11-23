@@ -2,9 +2,29 @@
 
 Trabalho 3, seguindo a estrutura dos exemplos de alunos e cursos. Os exemplos originais continuam disponíveis fora desta pasta.
 
-- `dw3backend/apps/`: um arquivo por entidade (`pastos.js`, `piquetes.js`, `animais.js` e `alocados.js`), com as funções da API e as consultas SQL juntas. O login fica em `login.js`.
-- `dw3frontend/apps/`: listagem, formulário e funções JavaScript de cada cadastro.
+- **Model:** `dw3backend/apps/<modulo>/model/mdl*.js` contém as consultas SQL e retorna os dados, sem usar `req` ou `res`.
+- **Controller:** `dw3backend/apps/<modulo>/controller/ctl*.js` recebe e valida a requisição, chama o model e monta a resposta JSON.
+- **View:** `dw3frontend/views/` contém os templates Nunjucks. Os arquivos em `dw3frontend/public/js/` cuidam dos formulários e das chamadas à API.
+- **Rotas:** `dw3backend/routes/router.js` liga cada endpoint ao controller e mantém a proteção JWT. As rotas do front-end renderizam as views.
 - `dw3backend/databaseConfig.sql`: tabelas pasto, piquete, animal e alocado, com chaves estrangeiras e exclusão lógica.
+
+A aplicação segue MVC com cliente e servidor separados: a View está no front-end e consome as respostas JSON dos Controllers da API. O front-end não acessa o banco de dados.
+
+Exemplo do cadastro de pastos:
+
+```text
+dw3backend/apps/pastos/
+├── controller/ctlPastos.js
+└── model/mdlPastos.js
+
+dw3frontend/
+├── views/pastos/
+│   ├── vwLstPastos.njk
+│   └── vwFormPastos.njk
+└── public/js/pastos/
+    ├── vwLstPastos.js
+    └── vwFormPastos.js
+```
 
 ## Executar com Docker
 

@@ -11,13 +11,12 @@ require('dotenv').config({ path: path.join(__dirname, 'dw3frontend.env'), quiet:
 
 var app = express();
 var viewsPath = path.join(__dirname, 'views');
-var appsPath = path.join(__dirname, 'apps');
 const port = process.env.PORT || 40103;
 
-app.set('views', [viewsPath, appsPath]);
+app.set('views', viewsPath);
 app.set('view engine', 'njk');
 
-nunjucks.configure([viewsPath, appsPath], {
+nunjucks.configure(viewsPath, {
   autoescape: true,
   express: app,
   noCache: app.get('env') === 'development'
@@ -26,7 +25,6 @@ nunjucks.configure([viewsPath, appsPath], {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/apps', express.static(path.join(__dirname, 'apps')));
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter);

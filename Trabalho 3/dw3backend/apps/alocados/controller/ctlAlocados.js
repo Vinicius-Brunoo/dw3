@@ -1,10 +1,7 @@
-const db = require("../database/databaseconfig");
+const mdlAlocados = require("../model/mdlAlocados");
 
 async function GetAllAlocados(req, res) {
-    const result = await db.query(
-        "SELECT alocadoid, animalidifk, piqueteidfk, TO_CHAR(datainicio, 'YYYY-MM-DD') AS datainicio, TO_CHAR(datafinal, 'YYYY-MM-DD') AS datafinal, removido FROM alocado WHERE removido = false ORDER BY alocadoid"
-    );
-    const registro = result.rows;
+    const registro = await mdlAlocados.GetAllAlocados();
     res.json({ status: "ok", registro });
 }
 
@@ -13,11 +10,7 @@ async function GetAlocadoByID(req, res) {
     if (!Number.isSafeInteger(id) || id <= 0) {
         return res.status(400).json({ status: "ID inválido." });
     }
-    const result = await db.query(
-        "SELECT alocadoid, animalidifk, piqueteidfk, TO_CHAR(datainicio, 'YYYY-MM-DD') AS datainicio, TO_CHAR(datafinal, 'YYYY-MM-DD') AS datafinal, removido FROM alocado WHERE alocadoid = $1 AND removido = false",
-        [id]
-    );
-    const registro = result.rows;
+    const registro = await mdlAlocados.GetAlocadoByID(id);
     res.json({ status: "ok", registro });
 }
 
@@ -35,11 +28,8 @@ async function InsertAlocado(req, res) {
         return res.status(400).json({ status: "Preencha os campos obrigatórios." });
     }
     registro.datafinal = registro.datafinal || null;
-    const result = await db.query(
-        "INSERT INTO alocado (animalidifk, piqueteidfk, datainicio, datafinal) VALUES ($1, $2, $3, $4) RETURNING alocadoid",
-        [registro.animalidifk, registro.piqueteidfk, registro.datainicio, registro.datafinal]
-    );
-    res.json({ status: "ok", linhasAfetadas: result.rowCount, alocadoid: result.rows[0].alocadoid });
+    const result = await mdlAlocados.InsertAlocado(registro);
+    res.json({ status: "ok", ...result });
 }
 
 async function UpdateAlocado(req, res) {
@@ -60,12 +50,9 @@ async function UpdateAlocado(req, res) {
         return res.status(400).json({ status: "Preencha os campos obrigatórios." });
     }
     registro.datafinal = registro.datafinal || null;
-    const result = await db.query(
-        "UPDATE alocado SET animalidifk = $2, piqueteidfk = $3, datainicio = $4, datafinal = $5 WHERE alocadoid = $1 AND removido = false",
-        [id, registro.animalidifk, registro.piqueteidfk, registro.datainicio, registro.datafinal]
-    );
-    if (!result.rowCount) return res.status(404).json({ status: "Registro não encontrado." });
-    res.json({ status: "ok", linhasAfetadas: result.rowCount });
+    const result = await mdlAlocados.UpdateAlocado(id, registro);
+    if (!result.linhasAfetadas) return res.status(404).json({ status: "Registro não encontrado." });
+    res.json({ status: "ok", ...result });
 }
 
 async function DeleteAlocado(req, res) {
@@ -73,12 +60,9 @@ async function DeleteAlocado(req, res) {
     if (!Number.isSafeInteger(id) || id <= 0) {
         return res.status(400).json({ status: "ID inválido." });
     }
-    const result = await db.query(
-        "UPDATE alocado SET removido = true WHERE alocadoid = $1 AND removido = false",
-        [id]
-    );
-    if (!result.rowCount) return res.status(404).json({ status: "Registro não encontrado." });
-    res.json({ status: "ok", linhasAfetadas: result.rowCount });
+    const result = await mdlAlocados.DeleteAlocado(id);
+    if (!result.linhasAfetadas) return res.status(404).json({ status: "Registro não encontrado." });
+    res.json({ status: "ok", ...result });
 }
 
 module.exports = { GetAllAlocados, GetAlocadoByID, InsertAlocado, UpdateAlocado, DeleteAlocado };
